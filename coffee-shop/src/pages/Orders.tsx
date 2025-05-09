@@ -1,0 +1,106 @@
+import React, { useEffect, useState } from 'react';
+
+interface Coffee {
+  id: number;
+  name: string;
+  image: string;
+  description: string;
+  price: number;
+}
+
+interface OrderItem {
+  id: number;
+  coffee: Coffee;
+  quantity: number;
+}
+
+interface Order {
+  id: number;
+  userId: number;
+  createdAt: string;
+  items: OrderItem[];
+}
+
+const Orders: React.FC = () => {
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch('/orders/user/1')
+      .then(res => {
+        console.log(res.headers.get('content-type'));
+        if (!res.ok) throw new Error('Ошибка при загрузке заказов');
+        return res.json();
+      })
+      .then(data => {
+        setOrders(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        setError(err.message);
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) return <p>Загрузка заказов...</p>;
+  if (error) return <p style={{ color: 'red' }}>Ошибка: {error}</p>;
+
+  return (
+    <div style={{ maxWidth: 900, margin: '30px auto', fontFamily: 'Arial, sans-serif' }}>
+      <h2>Список заказов</h2>
+      {orders.length === 0 && <p>Заказов нет.</p>}
+
+      {orders.map(order => {
+        const totalPrice = order.items.reduce((sum, item) => sum + item.coffee.price * item.quantity, 0);
+
+        return (
+          <div
+            key={order.id}
+            style={{
+              border: '1px solid #ddd',
+              borderRadius: 8,
+              padding: 20,
+              marginBottom: 20,
+              backgroundColor: '#fff',
+              boxShadow: '0 4px 10px rgba(0,0,0,0.05)',
+            }}
+          >
+            <p style={{ fontWeight: 'bold' }}>Заказ №{order.id}</p>
+            {/* <p>Пользователь ID: {order.userId}</p> */}
+            <p>Дата: {new Date(order.createdAt).toLocaleString()}</p>
+
+            <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: 10 }}>
+              <thead>
+                <tr>
+                  <th style={{ borderBottom: '1px solid #ccc', textAlign: 'left', padding: '8px' }}>Товар</th>
+                  <th style={{ borderBottom: '1px solid #ccc', textAlign: 'center', padding: '8px' }}>Кол-во</th>
+                  <th style={{ borderBottom: '1px solid #ccc', textAlign: 'right', padding: '8px' }}>Цена за шт.</th>
+                  <th style={{ borderBottom: '1px solid #ccc', textAlign: 'right', padding: '8px' }}>Итого</th>
+                </tr>
+              </thead>
+              <tbody>
+                {order.items.map(item => (
+                  <tr key={item.id}>
+                    <td style={{ borderBottom: '1px solid #eee', padding: '8px' }}>{item.coffee.name}</td>
+                    <td style={{ borderBottom: '1px solid #eee', textAlign: 'center' }}>{item.quantity}</td>
+                    <td style={{ borderBottom: '1px solid #eee', textAlign: 'right' }}>{item.coffee.price} ₽</td>
+                    <td style={{ borderBottom: '1px solid #eee', textAlign: 'right' }}>
+                      {item.coffee.price * item.quantity} ₽
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+            <p style={{ textAlign: 'right', fontWeight: 'bold', marginTop: 10 }}>
+              Итого по заказу: {totalPrice} ₽
+            </p>
+          </div>
+        );
+      })}
+    </div>
+  );
+};
+
+export default Orders;
