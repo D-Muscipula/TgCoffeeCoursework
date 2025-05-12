@@ -8,7 +8,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     ports:
-      - "5432:5432"
+      - "5435:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
 
@@ -48,9 +48,8 @@ services:
       - backend
     ports:
       - "3000:80"
-    # environment:
-    #   # если фронту нужен API-URL, например:
-    #   VITE_API_URL: http://localhost:8080
+    environment:
+      VITE_API_URL: http://backend:8080
 
 volumes:
   pgdata:
