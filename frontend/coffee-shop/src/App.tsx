@@ -9,10 +9,9 @@ import Orders from './pages/Orders';
 
 function sendInitData(initData: string) {
   fetch('/api/check-initdata', {
-    method: 'POST',
+    method: 'GET',
     headers: {
-      'X-Telegram-InitData': initData,      
-      'Content-Type': 'application/json', 
+      'X-Telegram-InitData': initData
     }
   })
     .then(res => res.text())
@@ -21,6 +20,7 @@ function sendInitData(initData: string) {
     })
     .catch(err => alert('Ошибка: ' + err));
 }
+
 
 const App: React.FC = () => {
     // @ts-ignore
