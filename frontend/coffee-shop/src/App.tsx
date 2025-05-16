@@ -7,7 +7,25 @@ import CoffeeDetail from './pages/CoffeeDetail';
 import Cart from './components/Cart';
 import Orders from './pages/Orders';
 
+function sendInitData(initData: string) {
+  fetch('/api/check-initdata', {
+    method: 'POST',
+    headers: {
+      'X-Telegram-InitData': initData,      
+      'Content-Type': 'application/json', 
+    }
+  })
+    .then(res => res.text())
+    .then(text => {
+      alert("Ответ сервера: " + text);
+    })
+    .catch(err => alert('Ошибка: ' + err));
+}
+
 const App: React.FC = () => {
+    // @ts-ignore
+    const initData = window.Telegram?.WebApp?.initData || "query_id=...&user=...&auth_date=...&hash=...";
+    sendInitData(initData);
   return (
     <Router>
       <div className="app-container">
