@@ -12,7 +12,7 @@ class TelegramWebAppController {
         origins = ["*"],
         allowedHeaders = ["X-Telegram-InitData", "Content-Type"]
     )
-    @GetMapping("/api/check-initdata")
+    @GetMapping("/check-initdata")
     fun checkInitData(
         @RequestHeader("X-Telegram-InitData") initData: String
     ): ResponseEntity<String> {
