@@ -27,7 +27,7 @@ const Orders: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch('/orders/user/1')
+    fetch('/api/orders/user/1')
       .then(res => {
         console.log(res.headers.get('content-type'));
         if (!res.ok) throw new Error('Ошибка при загрузке заказов');

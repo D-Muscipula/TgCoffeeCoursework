@@ -9,7 +9,7 @@ import ru.university.coffee_shop.model.Coffee
 import ru.university.coffee_shop.service.CoffeeService
 
 @RestController
-@RequestMapping("/coffee")
+@RequestMapping("/api/coffee")
 class CoffeeController(private val coffeeService: CoffeeService) {
 
     @GetMapping("/{id}")

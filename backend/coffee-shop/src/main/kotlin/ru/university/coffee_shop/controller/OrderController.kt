@@ -11,7 +11,7 @@ import ru.university.coffee_shop.model.Order
 import ru.university.coffee_shop.service.OrderService
 
 @RestController
-@RequestMapping("/orders")
+@RequestMapping("/api/orders")
 class OrderController(val orderService: OrderService) {
     @PostMapping
     fun createOrder(@RequestBody request: CreateOrderRequest) {

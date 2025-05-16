@@ -15,7 +15,7 @@ const CoffeeList: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch('/coffee')
+    fetch('/api/coffee')
       .then(response => {
         if (!response.ok) {
           throw new Error('Ошибка при загрузке данных');

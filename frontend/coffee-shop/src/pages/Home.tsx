@@ -11,7 +11,7 @@ const Home: React.FC = () => {
       ]
     };
 
-    fetch('/orders', {
+    fetch('/api/orders', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

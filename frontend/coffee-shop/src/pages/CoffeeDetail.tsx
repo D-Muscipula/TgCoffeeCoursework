@@ -22,7 +22,7 @@ const CoffeeDetail: React.FC = () => {
   useEffect(() => {
     if (!id) return;
 
-    fetch(`/coffee/${id}`)
+    fetch(`/api/coffee/${id}`)
       .then(res => {
         if (!res.ok) throw new Error('Ошибка при загрузке данных');
         return res.json();
