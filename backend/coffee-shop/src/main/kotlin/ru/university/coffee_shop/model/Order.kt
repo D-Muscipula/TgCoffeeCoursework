@@ -1,5 +1,6 @@
 package ru.university.coffee_shop.model
 
+import com.fasterxml.jackson.annotation.JsonManagedReference
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
@@ -25,5 +26,6 @@ data class Order(
     var status: OrderStatus = OrderStatus.CREATED,
 
     @OneToMany(mappedBy = "order", cascade = [CascadeType.ALL], orphanRemoval = true)
+    @JsonManagedReference
     val items: MutableList<OrderItem> = mutableListOf()
 )
