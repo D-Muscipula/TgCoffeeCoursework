@@ -21,6 +21,8 @@ class TelegramAuthInterceptor(
         handler: Any
     ): Boolean {
         val initData = request.getHeader("X-Telegram-InitData")
+        println("HEADER: X-Telegram-InitData = $initData")
+
         if (initData == null || !isValid(initData, botToken)) {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid Telegram init data")
             return false
