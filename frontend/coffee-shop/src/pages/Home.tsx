@@ -1,6 +1,9 @@
 import React from 'react';
 import CoffeeList from '../components/CoffeeList';
 
+// @ts-ignore
+const initData = window.Telegram?.WebApp?.initData;
+
 const Home: React.FC = () => {
   const handleMakeOrder = () => {
     const orderData = {
@@ -15,6 +18,7 @@ const Home: React.FC = () => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'X-Telegram-InitData': initData
       },
       body: JSON.stringify(orderData),
     })

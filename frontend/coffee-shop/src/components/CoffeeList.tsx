@@ -13,9 +13,16 @@ const CoffeeList: React.FC = () => {
   const [coffees, setCoffees] = useState<Coffee[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  // @ts-ignore
+  const initData = window.Telegram?.WebApp?.initData;
 
   useEffect(() => {
-    fetch('/api/coffee')
+    fetch('/api/coffee', {
+      method: 'GET',
+      headers: {
+        'X-Telegram-InitData': initData
+      },
+    })
       .then(response => {
         if (!response.ok) {
           throw new Error('Ошибка при загрузке данных');
