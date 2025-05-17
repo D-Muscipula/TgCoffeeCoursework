@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { addToCart } from '../store/cartSlice';
-
+import { useTelegram } from '../store/TelegramContext';
 interface Coffee {
   id: number;
   name: string;
@@ -18,11 +18,16 @@ const CoffeeDetail: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [showMessage, setShowMessage] = useState(false);
   const dispatch = useDispatch();
+  const { initData } = useTelegram(); 
 
   useEffect(() => {
     if (!id) return;
 
-    fetch(`/api/coffee/${id}`)
+    fetch(`/api/coffee/${id}`, {
+      headers: {
+        'X-Telegram-InitData': initData || '',
+      }
+    })
       .then(res => {
         if (!res.ok) throw new Error('Ошибка при загрузке данных');
         return res.json();
@@ -35,7 +40,7 @@ const CoffeeDetail: React.FC = () => {
         setError(err.message);
         setLoading(false);
       });
-  }, [id]);
+  }, [id, initData]);
 
   const handleAddToCart = () => {
     if (!coffee) return;
@@ -53,7 +58,7 @@ const CoffeeDetail: React.FC = () => {
   if (loading) return <p>Загрузка...</p>;
   if (error) return <p>Ошибка: {error}</p>;
   if (!coffee) return <p>Кофе не найден</p>;
-
+  
   return (
     <div style={{ position: 'relative' }}>
       <h2>{coffee.name}</h2>

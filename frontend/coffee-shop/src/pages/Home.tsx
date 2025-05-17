@@ -1,10 +1,10 @@
 import React from 'react';
 import CoffeeList from '../components/CoffeeList';
-
-// @ts-ignore
-const initData = window.Telegram?.WebApp?.initData;
+import { useTelegram } from '../store/TelegramContext';
 
 const Home: React.FC = () => {
+  const { initData } = useTelegram(); // получаем initData из глобального контекста
+
   const handleMakeOrder = () => {
     const orderData = {
       userId: 1,
@@ -18,7 +18,7 @@ const Home: React.FC = () => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-Telegram-InitData': initData
+        'X-Telegram-InitData': initData || ''
       },
       body: JSON.stringify(orderData),
     })
@@ -37,8 +37,8 @@ const Home: React.FC = () => {
     <div style={{ maxWidth: 800, margin: '30px auto' }}>
       <h1>Добро пожаловать в наш магазин кофе!</h1>
       <CoffeeList />
-      <button 
-        onClick={handleMakeOrder} 
+      <button
+        onClick={handleMakeOrder}
         style={{
           marginTop: 20,
           padding: '12px 28px',
