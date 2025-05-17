@@ -15,7 +15,7 @@ data class Order(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
 
-    val userId: Long,  // поле для id пользователя
+    val userId: String,
 
     val createdAt: LocalDateTime = LocalDateTime.now(),
 

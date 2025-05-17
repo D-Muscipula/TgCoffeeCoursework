@@ -27,6 +27,11 @@ class TelegramAuthInterceptor(
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid Telegram init data")
             return false
         }
+        val params = parseQueryString(initData)
+        val chatInstance = params["chat_instance"]
+        chatInstance?.let {
+            request.setAttribute("telegramChatInstance", it)
+        }
         return true
     }
 

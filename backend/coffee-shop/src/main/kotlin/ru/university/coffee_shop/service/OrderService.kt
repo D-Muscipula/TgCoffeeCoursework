@@ -14,8 +14,8 @@ class OrderService(
     private val coffeeRepository: CoffeeRepository,
 ) {
     @Transactional
-    fun createOrder(request: CreateOrderRequest): Order {
-        val order = Order(userId = request.userId)
+    fun createOrder(request: CreateOrderRequest, userId: String): Order {
+        val order = Order(userId = userId)
         request.items.forEach { itemReq ->
             val coffee = coffeeRepository.findById(itemReq.coffeeId)
                 .orElseThrow { Exception("Coffee id=${itemReq.coffeeId} not found") }
@@ -24,7 +24,7 @@ class OrderService(
         return orderRepository.save(order)
     }
 
-    fun getOrdersForUser(userId: Long): List<Order> {
+    fun getOrdersForUser(userId: String): List<Order> {
         return orderRepository.findAllByUserId(userId)
     }
 }

@@ -7,7 +7,6 @@ const Home: React.FC = () => {
 
   const handleMakeOrder = () => {
     const orderData = {
-      userId: 1,
       items: [
         { coffeeId: 2, quantity: 1 },
         { coffeeId: 3, quantity: 2 }
