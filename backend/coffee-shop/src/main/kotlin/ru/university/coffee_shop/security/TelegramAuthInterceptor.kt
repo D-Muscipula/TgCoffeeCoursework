@@ -1,5 +1,7 @@
 package ru.university.coffee_shop.security
 
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.beans.factory.annotation.Value
@@ -28,9 +30,14 @@ class TelegramAuthInterceptor(
             return false
         }
         val params = parseQueryString(initData)
-        val chatInstance = params["chat_instance"]
-        chatInstance?.let {
-            request.setAttribute("telegramChatInstance", it)
+        val user = params["user"]
+        user?.let {
+            val mapper = jacksonObjectMapper()
+            val userMap: Map<String, Any> = mapper.readValue(user)
+            val id = userMap["id"]
+            id?.let {
+                request.setAttribute("telegramChatInstance", it)
+            }
         }
         return true
     }
@@ -57,7 +64,10 @@ class TelegramAuthInterceptor(
         for (pair in pairs) {
             val idx = pair.indexOf("=")
             val key = if (idx > 0) URLDecoder.decode(pair.substring(0, idx), StandardCharsets.UTF_8) else pair
-            val value = if (idx > 0 && pair.length > idx + 1) URLDecoder.decode(pair.substring(idx + 1), StandardCharsets.UTF_8) else ""
+            val value = if (idx > 0 && pair.length > idx + 1) URLDecoder.decode(
+                pair.substring(idx + 1),
+                StandardCharsets.UTF_8
+            ) else ""
             parameters[key] = value
         }
         return parameters
