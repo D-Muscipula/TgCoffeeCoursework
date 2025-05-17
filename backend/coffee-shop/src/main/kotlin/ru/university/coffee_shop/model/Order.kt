@@ -2,6 +2,8 @@ package ru.university.coffee_shop.model
 
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
@@ -19,7 +21,9 @@ data class Order(
 
     val createdAt: LocalDateTime = LocalDateTime.now(),
 
+    @Enumerated(EnumType.STRING)
+    var status: OrderStatus = OrderStatus.CREATED,
+
     @OneToMany(mappedBy = "order", cascade = [CascadeType.ALL], orphanRemoval = true)
     val items: MutableList<OrderItem> = mutableListOf()
 )
-

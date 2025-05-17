@@ -1,6 +1,7 @@
 package ru.university.coffee_shop.model
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
-@ParametersAreNonnullByDefaultenum class OrderStatus {
+enum class OrderStatus {
+    CREATED,
+    COMPLETED,
+    CANCELED
 }

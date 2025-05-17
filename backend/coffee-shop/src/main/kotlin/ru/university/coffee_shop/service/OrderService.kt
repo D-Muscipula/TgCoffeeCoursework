@@ -27,5 +27,13 @@ class OrderService(
     fun getOrdersForUser(userId: String): List<Order> {
         return orderRepository.findAllByUserId(userId)
     }
+
+    fun findOrderById(orderId: Long): Order? {
+        return orderRepository.findById(orderId).orElse(null)
+    }
+
+    fun update(order: Order): Order {
+        return orderRepository.update(order)
+    }
 }
 

@@ -19,6 +19,7 @@ interface Order {
   id: number;
   userId: number;
   createdAt: string;
+  status: string;                         
   items: OrderItem[];
 }
 
@@ -52,6 +53,22 @@ const Orders: React.FC = () => {
         setError(err.message);
         setLoading(false);
       });
+  };
+
+  const handleCancel = async (orderId: number) => {
+    if (!window.confirm('Вы уверены, что хотите отменить этот заказ?')) return;
+    try {
+      const res = await fetch(`/api/orders/${orderId}`, {
+        method: 'DELETE',
+        headers: {
+          'X-Telegram-InitData': initData || '',
+        },
+      });
+      if (!res.ok) throw new Error('Ошибка при отмене заказа');
+      loadOrders(); // перезагрузка списка заказов
+    } catch (e: any) {
+      alert(e.message);
+    }
   };
 
   useEffect(() => {
@@ -93,8 +110,15 @@ const Orders: React.FC = () => {
             <p style={{ fontWeight: 'bold' }}>Заказ №{order.id}</p>
             {/* <p>Пользователь ID: {order.userId}</p> */}
             <p>Дата: {new Date(order.createdAt).toLocaleString()}</p>
+            <p>Статус: {
+              order.status === 'CANCELED' ? 
+                <span style={{ color: 'red' }}>Отменён</span> : 
+                order.status === 'COMPLETED' ?
+                  <span style={{ color: 'green' }}>Выполнен</span> :
+                  'Создан'
+            }</p>
 
-            <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: 10 }}>
+            <table>
               <thead>
                 <tr>
                   <th style={{ borderBottom: '1px solid #ccc', textAlign: 'left', padding: '8px' }}>Товар</th>
@@ -120,6 +144,12 @@ const Orders: React.FC = () => {
             <p style={{ textAlign: 'right', fontWeight: 'bold', marginTop: 10 }}>
               Итого по заказу: {totalPrice} ₽
             </p>
+            {/* Кнопка "Отменить заказ" только если он не отменён */}
+            {order.status !== 'CANCELED' && (
+              <button onClick={() => handleCancel(order.id)}>
+                Отменить заказ
+              </button>
+            )}
           </div>
         );
       })}
