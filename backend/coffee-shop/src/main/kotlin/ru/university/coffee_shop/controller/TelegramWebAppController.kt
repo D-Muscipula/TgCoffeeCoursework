@@ -1,3 +1,5 @@
+package ru.university.coffee_shop.controller
+
 import io.github.cdimascio.dotenv.Dotenv
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
