@@ -33,7 +33,7 @@ class OrderService(
     }
 
     fun update(order: Order): Order {
-        return orderRepository.update(order)
+        return orderRepository.save(order)
     }
 }
 

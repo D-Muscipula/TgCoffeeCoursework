@@ -5,5 +5,5 @@ import ru.university.coffee_shop.model.Order
 
 interface OrderRepository : JpaRepository<Order, Long> {
     fun findAllByUserId(userId: String): List<Order>
-    fun update(order: Order): Order
+    fun save(order: Order): Order
 }
