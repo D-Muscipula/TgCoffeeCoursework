@@ -38,8 +38,6 @@ services:
       TELEGRAM_TOKEN: ${TELEGRAM_TOKEN}
     depends_on:
       - backend
-    # ports: если нужен, например:
-    # - "5000:5000"
 
   frontend:
     build:

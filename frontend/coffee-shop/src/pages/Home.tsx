@@ -3,7 +3,7 @@ import CoffeeList from '../components/CoffeeList';
 import { useTelegram } from '../store/TelegramContext';
 
 const Home: React.FC = () => {
-  const { initData } = useTelegram(); // получаем initData из глобального контекста
+  const { initData } = useTelegram();
 
   const handleMakeOrder = () => {
     const orderData = {
