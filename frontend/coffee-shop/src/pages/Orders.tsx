@@ -22,6 +22,8 @@ interface Order {
   items: OrderItem[];
 }
 
+const ORDERS_UPDATE_INTERVAL = 5_000;
+
 const Orders: React.FC = () => {
   const { initData } = useTelegram();
 
@@ -29,7 +31,9 @@ const Orders: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
+  const loadOrders = () => {
+    setLoading(true);
+    setError(null);
     fetch('/api/orders/user', {
       headers: {
         'X-Telegram-InitData': initData || ''
@@ -48,6 +52,16 @@ const Orders: React.FC = () => {
         setError(err.message);
         setLoading(false);
       });
+  };
+
+  useEffect(() => {
+    loadOrders();
+
+    const intervalId = setInterval(() => {
+      loadOrders();
+    }, ORDERS_UPDATE_INTERVAL);
+
+    return () => clearInterval(intervalId);
   }, [initData]);
 
   if (loading) return <p>Загрузка заказов...</p>;
@@ -56,6 +70,9 @@ const Orders: React.FC = () => {
   return (
     <div style={{ maxWidth: 900, margin: '30px auto', fontFamily: 'Arial, sans-serif' }}>
       <h2>Список заказов</h2>
+      <button onClick={loadOrders} style={{ marginBottom: 16 }}>
+        Обновить заказы вручную
+      </button>
       {orders.length === 0 && <p>Заказов нет.</p>}
 
       {orders.map(order => {
