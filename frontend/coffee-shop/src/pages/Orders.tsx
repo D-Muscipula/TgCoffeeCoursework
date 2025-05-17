@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTelegram } from '../store/TelegramContext';
 
 interface Coffee {
   id: number;
@@ -22,12 +23,18 @@ interface Order {
 }
 
 const Orders: React.FC = () => {
+  const { initData } = useTelegram();
+
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch('/api/orders/user/1')
+    fetch('/api/orders/user/1', {
+      headers: {
+        'X-Telegram-InitData': initData || ''
+      }
+    })
       .then(res => {
         console.log(res.headers.get('content-type'));
         if (!res.ok) throw new Error('Ошибка при загрузке заказов');
@@ -41,7 +48,7 @@ const Orders: React.FC = () => {
         setError(err.message);
         setLoading(false);
       });
-  }, []);
+  }, [initData]);
 
   if (loading) return <p>Загрузка заказов...</p>;
   if (error) return <p style={{ color: 'red' }}>Ошибка: {error}</p>;
