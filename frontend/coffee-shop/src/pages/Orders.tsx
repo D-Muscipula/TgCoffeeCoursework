@@ -30,7 +30,7 @@ const Orders: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch('/api/orders/user/1', {
+    fetch('/api/orders/user', {
       headers: {
         'X-Telegram-InitData': initData || ''
       }
