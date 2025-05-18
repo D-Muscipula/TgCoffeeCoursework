@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -8,27 +8,9 @@ import Cart from './components/Cart';
 import Orders from './pages/Orders';
 import { TelegramContext } from './store/TelegramContext';
 
-function sendInitData(initData: string) {
-  fetch('/api/check-initdata', {
-    method: 'GET',
-    headers: {
-      'X-Telegram-InitData': initData
-    }
-  })
-    .then(res => res.text())
-    .then(text => {
-      alert('Ответ сервера: ' + text);
-    })
-    .catch(err => alert('Ошибка: ' + err));
-}
-
 const App: React.FC = () => {
   // @ts-ignore
   const initData = window.Telegram?.WebApp?.initData || null;
-
-  useEffect(() => {
-    if (initData) sendInitData(initData);
-  }, [initData]);
 
   return (
     <TelegramContext.Provider value={{ initData }}>
