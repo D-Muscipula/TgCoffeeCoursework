@@ -19,14 +19,14 @@ import ru.university.coffee_shop.service.OrderService
 class OrderController(val orderService: OrderService) {
     @PostMapping
     fun createOrder(
-        @RequestAttribute("telegramChatInstance") chatInstance: String,
+        @RequestAttribute("telegramUserId") chatInstance: String,
         @RequestBody request: CreateOrderRequest
     ) {
         orderService.createOrder(request, chatInstance)
     }
 
     @GetMapping("/user")
-    fun ordersOfUser(@RequestAttribute("telegramChatInstance") chatInstance: String): List<Order> {
+    fun ordersOfUser(@RequestAttribute("telegramUserId") chatInstance: String): List<Order> {
         return orderService.getOrdersForUser(chatInstance)
     }
 

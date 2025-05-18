@@ -36,7 +36,7 @@ class TelegramAuthInterceptor(
             val userMap: Map<String, Any> = mapper.readValue(user)
             val id = userMap["id"]
             id?.let {
-                request.setAttribute("telegramChatInstance", it)
+                request.setAttribute("telegramUserId", it)
             }
         }
         return true
