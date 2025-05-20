@@ -31,6 +31,9 @@ dependencies {
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
 	implementation("io.github.cdimascio:dotenv-kotlin:6.4.1")
+
+	implementation("net.jqwik:jqwik-kotlin:1.9.2")
+	testImplementation ("org.mockito:mockito-core")
 }
 
 kotlin {
