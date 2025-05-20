@@ -43,40 +43,157 @@ const Cart: React.FC = () => {
     );
   }
 
-
   return (
-    <div>
-      <h2>Ваша Корзина</h2>
-      <ul className="cart-list">
-        {cartItems.map(item => (
-          <li key={item.id} className="cart-item">
-            <img src={item.image} alt={item.name} className="cart-item-image" />
-            <div className="cart-item-info">
-              <h3>{item.name}</h3>
-              <p>Цена: {item.price} ₽</p>
-              <p>Количество: {item.quantity}</p>
-              <div className="cart-item-controls">
-                <button onClick={() => dispatch(addToCart(item))}>+</button>
-                <button onClick={() => dispatch(removeFromCart(item.id))}>-</button>
-                <button onClick={() => dispatch(deleteFromCart(item.id))}>Удалить</button>
+    <div style={{
+      maxWidth: '400px',
+      margin: '0 auto',
+      padding: '20px',
+      borderRadius: '16px',
+      boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
+      backgroundColor: 'white'
+    }}>
+      <h2 style={{
+        textAlign: 'center', 
+        marginBottom: '20px', 
+        color: '#333'
+      }}>
+        Ваша Корзина
+      </h2>
+
+      {cartItems.length === 0 ? (
+        <p style={{
+          textAlign: 'center', 
+          color: '#666', 
+          padding: '20px 0'
+        }}>
+          Нет товаров в корзине
+        </p>
+      ) : (
+        <>
+          <div style={{
+            marginBottom: '20px',
+            borderBottom: '1px solid #eee',
+            paddingBottom: '15px'
+          }}>
+            {cartItems.map(item => (
+              <div 
+                key={item.id} 
+                style={{
+                  display: 'flex', 
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  marginBottom: '10px'
+                }}
+              >
+                <div style={{display: 'flex', alignItems: 'center'}}>
+                  <img 
+                    src={item.image} 
+                    alt={item.name} 
+                    style={{
+                      width: '50px', 
+                      height: '50px', 
+                      borderRadius: '8px', 
+                      marginRight: '10px'
+                    }} 
+                  />
+                  <div>
+                    <p style={{margin: 0, fontWeight: 'bold'}}>{item.name}</p>
+                    <p style={{margin: 0, color: '#666'}}>{item.price} ₽</p>
+                  </div>
+                </div>
+                
+                <div style={{
+                  display: 'flex', 
+                  alignItems: 'center'
+                }}>
+                  <button 
+                    onClick={() => dispatch(removeFromCart(item.id))} 
+                    style={buttonStyle}
+                  >
+                    -
+                  </button>
+                  <span style={{margin: '0 10px'}}>{item.quantity}</span>
+                  <button 
+                    onClick={() => dispatch(addToCart(item))} 
+                    style={buttonStyle}
+                  >
+                    +
+                  </button>
+                  <button 
+                    onClick={() => dispatch(deleteFromCart(item.id))} 
+                    style={{
+                      ...buttonStyle, 
+                      backgroundColor: '#ff4d4d', 
+                      color: 'white',
+                      marginLeft: '10px'
+                    }}
+                  >
+                    Удалить
+                  </button>
+                </div>
               </div>
-            </div>
-          </li>
-        ))}
-      </ul>
-      <h3 className="cart-total">Общая сумма: {totalPrice} ₽</h3>
-      <button className="cart-clear-btn" onClick={() => dispatch(clearCart())}>
-        Очистить корзину
-      </button>
-      <button
-        className="cart-order-btn"
-        onClick={handleMakeOrder}
-        style={{ marginLeft: 12, background: '#3b82f6', color: '#fff', padding: '10px 30px', borderRadius: 8 }}
-      >
-        Оформить заказ
-      </button>
+            ))}
+          </div>
+
+          <div style={{
+            display: 'flex', 
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: '20px'
+          }}>
+            <strong>Общая сумма:</strong>
+            <span style={{
+              fontSize: '1.2em', 
+              fontWeight: 'bold',
+              color: '#333'
+            }}>
+              {totalPrice} ₽
+            </span>
+          </div>
+
+          <div style={{
+            display: 'flex', 
+            justifyContent: 'space-between'
+          }}>
+            <button 
+              onClick={() => dispatch(clearCart())}
+              style={{
+                ...buttonStyle,
+                backgroundColor: '#ff4d4d', 
+                color: 'white',
+                flex: 1,
+                marginRight: '10px'
+              }}
+            >
+              Очистить корзину
+            </button>
+            <button
+              onClick={handleMakeOrder}
+              style={{
+                ...buttonStyle,
+                backgroundColor: '#4CAF50', 
+                color: 'white',
+                flex: 1
+              }}
+            >
+              Оформить заказ
+            </button>
+          </div>
+        </>
+      )}
     </div>
   );
+};
+
+// Общий стиль для кнопок
+const buttonStyle = {
+  padding: '8px 12px',
+  border: 'none',
+  borderRadius: '8px',
+  cursor: 'pointer',
+  backgroundColor: '#e0e0e0',
+  color: '#333',
+  transition: 'background-color 0.3s ease'
 };
 
 export default Cart;
