@@ -22,13 +22,22 @@ class TelegramAuthInterceptor(
         response: HttpServletResponse,
         handler: Any
     ): Boolean {
+        println("Intercepting request to: ${request.requestURI}")
         val initData = request.getHeader("X-Telegram-InitData")
         println("HEADER: X-Telegram-InitData = $initData")
 
-        if (initData == null || !isValid(initData, botToken)) {
+        if (initData == null || initData.isEmpty()) {
+            println("No X-Telegram-InitData header found")
+            response.sendError(HttpServletResponse.SC_NOT_ACCEPTABLE, "Missing X-Telegram-InitData header")
+            return false
+        }
+
+        if (!isValid(initData, botToken)) {
+            println("Invalid Telegram init data")
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid Telegram init data")
             return false
         }
+
         val params = parseQueryString(initData)
         val user = params["user"]
         user?.let {

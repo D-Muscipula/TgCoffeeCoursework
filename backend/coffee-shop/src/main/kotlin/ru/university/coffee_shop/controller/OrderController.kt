@@ -16,18 +16,28 @@ import ru.university.coffee_shop.service.OrderService
 
 @RestController
 @RequestMapping("/api/orders")
-class OrderController(val orderService: OrderService) {
+class OrderController(
+    private val orderService: OrderService
+) {
+
+    @GetMapping("/user")
+    fun ordersOfUser(@RequestAttribute("telegramUserId") chatInstance: String): List<Order> {
+        return orderService.getOrdersForUser(chatInstance)
+    }
+
+    @DeleteMapping("/user")
+    fun deleteUserOrders(): ResponseEntity<Unit> {
+        return ResponseEntity.status(405)
+            .header("Allow", "GET")
+            .build()
+    }
+
     @PostMapping
     fun createOrder(
         @RequestAttribute("telegramUserId") chatInstance: String,
         @RequestBody request: CreateOrderRequest
     ) {
         orderService.createOrder(request, chatInstance)
-    }
-
-    @GetMapping("/user")
-    fun ordersOfUser(@RequestAttribute("telegramUserId") chatInstance: String): List<Order> {
-        return orderService.getOrdersForUser(chatInstance)
     }
 
     @DeleteMapping("/{orderId}")
