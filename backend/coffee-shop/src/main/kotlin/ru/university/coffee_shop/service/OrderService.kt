@@ -21,12 +21,21 @@ class OrderService(
         if (request.items.isEmpty()) {
             throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Список товаров не может быть пустым")
         }
+
         request.items.forEach { itemReq ->
             if (itemReq == null) {
                 throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Order item cannot be null")
             }
+            if (itemReq.quantity < 1 || itemReq.quantity > 1000) {
+                throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Количество должно быть от 1 до 1000")
+            }
             val coffee = coffeeRepository.findById(itemReq.coffeeId)
-                .orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND, "Coffee id=${itemReq.coffeeId} not found")}
+                .orElseThrow {
+                    ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Coffee id=${itemReq.coffeeId} not found"
+                    )
+                }
             order.items.add(OrderItem(order = order, coffee = coffee, quantity = itemReq.quantity))
         }
         return orderRepository.save(order)

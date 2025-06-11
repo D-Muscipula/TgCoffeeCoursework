@@ -1,6 +1,7 @@
 package ru.university.coffee_shop.controller
 
 import org.springframework.http.ResponseEntity
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -35,7 +36,7 @@ class OrderController(
     @PostMapping
     fun createOrder(
         @RequestAttribute("telegramUserId") chatInstance: String,
-        @RequestBody request: CreateOrderRequest
+        @Validated @RequestBody request: CreateOrderRequest
     ) {
         orderService.createOrder(request, chatInstance)
     }
@@ -44,19 +45,16 @@ class OrderController(
     fun cancelOrder(
         @PathVariable orderId: Long,
         @RequestAttribute("telegramUserId") userId: String
-    ): ResponseEntity<String> {
+    ): ResponseEntity<Map<String, String>> {
         val order = orderService.findOrderById(orderId)
             ?: return ResponseEntity.notFound().build()
 
         if (order.userId != userId) {
-            return ResponseEntity.status(403).body("Нет доступа к заказу")
-        }
-        if (order.status == OrderStatus.CANCELED) {
-            return ResponseEntity.badRequest().body("Заказ уже отменён")
+            return ResponseEntity.status(403).body(mapOf("message" to "Нет доступа к заказу"))
         }
 
         order.status = OrderStatus.CANCELED
         orderService.update(order)
-        return ResponseEntity.ok("Заказ отменён")
+        return ResponseEntity.ok(mapOf("message" to "Заказ отменён"))
     }
 }

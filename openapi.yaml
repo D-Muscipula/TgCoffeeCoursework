@@ -72,7 +72,7 @@ components:
         quantity:
           type: integer
           minimum: 1
-          maximum: 100
+          maximum: 1000
         price:
           type: number
           format: float
@@ -101,7 +101,7 @@ components:
               quantity:
                 type: integer
                 minimum: 1
-                maximum: 100
+                maximum: 1000
 
 paths:
   /api/coffee:
@@ -226,8 +226,17 @@ paths:
                 properties:
                   message:
                     type: string
+                    example: "Заказ отменён"
         '400':
           description: Bad Request - Invalid ID format or order is already cancelled
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Заказ уже отменён"
         '401':
           description: Unauthorized - Missing or invalid Telegram authentication
         '403':
